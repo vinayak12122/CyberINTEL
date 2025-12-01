@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Press+Start+2P&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Gruppo&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Press+Start+2P&family=Unica+One&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+
+@import "tailwindcss";
+
+@import "highlight.js/styles/github-dark.min.css";
+
+
+@theme {
+    --font-poppins: "Poppins",
+        sans-serif;
+    --font-over: "Overpass Mono",
+        monospace;
+    --font-press: "Press Start 2P",
+        system-ui;
+    --font-gruppo: "Gruppo", sans-serif;
+    --font-unica: "Unica One", sans-serif;
+    --font-raleway: "Raleway", sans-serif;
+    --font-playfair: "Playfair",
+        serif;
+    --font-nunito: "Nunito",
+        sans-serif;
+    --font-mulish: "Mulish",
+        sans-serif;
+    --font-cinzel: "Cinzel",
+        serif;
+    --font-dm: "DM Serif Display",
+        serif;
+}
+
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #24282c transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.4);
+    border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+@keyframes bounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0.5);
+        opacity: 0.3;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.dot {
+    animation: bounce 1s infinite;
+}
+
+.dot.delay-0 {
+    animation-delay: 0s;
+}
+
+.dot.delay-200 {
+    animation-delay: 0.2s;
+}
+
+.dot.delay-400 {
+    animation-delay: 0.4s;
+}
+
+.subtle-blue-shadow {
+    box-shadow: 0 5px 15px rgba(0, 0, 139, 0.4);
+    /* Slight vertical offset (5px) and a dark navy blue (0, 0, 139) with 40% opacity */
+}
+
+@keyframes rotateShadow {
+    0% {
+        box-shadow: 0 0 40px 10px rgba(1, 141, 255, 0.45);
+    }
+
+    25% {
+        box-shadow: 0 0 50px 15px rgba(2, 139, 252, 0.596);
+    }
+
+    50% {
+        box-shadow: 0 0 60px 20px rgba(2, 139, 252, 0.747);
+    }
+
+    75% {
+        box-shadow: 0 0 60px 15px rgba(1, 139, 252, 0.89);
+    }
+
+    100% {
+        box-shadow: 0 0 50px 15px rgba(2, 139, 252, 0.596);
+    }
+}
+
+.animate-rotating-shadow {
+    animation: rotateShadow 3s linear infinite;
+}
+
+.features div {
+    cursor: pointer;
+    margin: 0px 8px 0px 8px;
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+}
+
+.features div:hover {
+    background: rgba(107, 114, 128, 0.2);
+    border: 1px solid rgba(128, 128, 128, 0.452);
+}
