@@ -1,10 +1,9 @@
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from .ai_core import chat_model, system_prompt
+from langchain_core.messages import AIMessage, HumanMessage
+from .ai_core import chat_model
 from sqlalchemy.orm import Session
 from db.models import ChatHistory
-from datetime import datetime, timedelta
+from datetime import datetime
 import uuid
-import asyncio
 
 async def generate_cyber_response(db: Session, session_id: uuid.UUID, user_text: str):
 
@@ -30,57 +29,48 @@ async def generate_cyber_response(db: Session, session_id: uuid.UUID, user_text:
             history.append(AIMessage(content=m.content))
 
     # --- Buffers ---
-    full_output = ""        
-    stream_buffer = ""        
-    last_token_time = 0        
+    full_output = ""
+    stream_buffer = ""
 
     def safe_boundary(text):
         t = text.strip()
+        return (
+            t.endswith((".", "?", "!")) or
+            t.endswith("```") or
+            (t.startswith("#") and t.endswith("\n")) or
+            (t.endswith("\n") and (t.strip().startswith("- ") or t.strip().startswith("* "))) or
+            len(t) > 60
+        )
 
-        if t.endswith((".", "?", "!")):
-            return True
+    try:
+        async for chunk in chat_model.astream(history):
+            token = chunk.content or ""
 
-        if t.endswith("```"):
-            return True
+            full_output += token
+            stream_buffer += token
 
-        if t.startswith("#") and t.endswith("\n"):
-            return True
+            yield token
 
-        if t.endswith("\n") and (t.strip().startswith("- ") or t.strip().startswith("* ")):
-            return True
+            if safe_boundary(stream_buffer):
+                stream_buffer = ""
 
-        if len(t) > 60:
-            return True
+    finally:
 
-        return False
+        if stream_buffer.strip():
+            extra = stream_buffer.strip()
+            if not extra.endswith((".", "?", "!")):
+                extra += "..."
+            full_output += extra
 
-    async for chunk in chat_model.astream(history):
-        token = chunk.content or ""
+        cleaned_full = full_output.strip()
+        if cleaned_full and not cleaned_full.endswith((".", "?", "!")):
+            cleaned_full += "..."
 
-        full_output += token
-        stream_buffer += token
-
-        yield token
-
-       
-        if safe_boundary(stream_buffer):
-            stream_buffer = ""  
-            
-    if stream_buffer.strip():
-        cleaned = stream_buffer.strip()
-        if not cleaned.endswith((".", "?", "!")):
-            cleaned += "..."
-        full_output += cleaned
-        yield cleaned
-
-    cleaned_full = full_output.strip()
-    if not cleaned_full.endswith((".", "?", "!")):
-        cleaned_full += "..."
-
-    db.add(ChatHistory(
-        session_id=session_id,
-        role="ai",
-        content=cleaned_full,
-        last_activity=datetime.utcnow()
-    ))
-    db.commit()
+        if cleaned_full:
+            db.add(ChatHistory(
+                session_id=session_id,
+                role="assistant", 
+                content=cleaned_full,
+                last_activity=datetime.utcnow()
+            ))
+            db.commit()
