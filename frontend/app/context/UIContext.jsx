@@ -17,7 +17,7 @@ export const UIProvider = ({ children }) =>{
 
     if (windowWidth === null) return null;
 
-    const isMobile = windowWidth < 620;
+    const isMobile = windowWidth < 750;
     return(
         <UIContext.Provider
             value={{ isMobile, isSidebarOpen, setIsSidebarOpen }}

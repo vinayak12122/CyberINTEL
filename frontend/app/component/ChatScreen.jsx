@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'; 
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const MarkdownComponents = {
     code({ node, inline, className, children, ...props }) {
@@ -108,7 +108,7 @@ const ChatScreen = ({ sessionId, isMobile, isSidebarOpen, setIsSidebarOpen = () 
         }
     };
 
-    const handleStop =()=>{
+    const handleStop = () => {
         stopResponse();
     }
 
@@ -116,20 +116,21 @@ const ChatScreen = ({ sessionId, isMobile, isSidebarOpen, setIsSidebarOpen = () 
         toast.info("Not available for now.")
     }
 
+    // console.log(isStreaming)
 
     return (
         <div className='h-screen w-full flex flex-col'>
             <div className="w-full flex items-center justify-end border-b border-gray-700/50 p-2 mr-2">
                 {isMobile && (
                     <div
-                        className={`${isMobile ? "text-[18px]" : "text-[24px]"} hover:bg-gray-400/10 rounded-md text-gray-400 my-1.5 mr-5 cursor-pointer p-2`}
+                        className={`${isMobile ? "text-[18px]" : "text-[24px]"} hover:bg-gray-400/10 rounded-md my-1.5 mr-8 cursor-pointer p-2`}
                         onClick={() => setIsSidebarOpen(true)}
                     >
                         <HiOutlineMenuAlt1 />
                     </div>
                 )}
                 <p className="text-white font-bold flex items-start w-[70%] lg:w-[92%] md:w-[85%] sm:w-[85%] py-1 font-press text-sm">
-                    <Link href={'/'}>CyberINTEL</Link>
+                    CyberINTEL
                 </p>
                 <div className="relative flex items-center">
                     {user ? (
@@ -163,7 +164,7 @@ const ChatScreen = ({ sessionId, isMobile, isSidebarOpen, setIsSidebarOpen = () 
                     ) : (
                         <Link
                             href="/auth/login"
-                            className="text-center text-gray-300 px-5 py-0.5 bg-gray-800/40 
+                                className="text-center text-gray-300 px-5 py-0.5 hover:bg-gray-500/20 hover:border-gray-600/80 transition-all duration-200
             w-max rounded border border-gray-600/30 cursor-pointer"
                         >
                             Login
@@ -179,7 +180,7 @@ const ChatScreen = ({ sessionId, isMobile, isSidebarOpen, setIsSidebarOpen = () 
                         key={index}
                         className={`my-2 flex ${msg.role === "user" ? "justify-end" : "justify-start"
 
-                            }  ${isMobile ? "w-[99%]" : "w-[60%]"} `}
+                            }  ${isMobile ? "w-[99%]" : "lg:w-[60%] md:w-[80%] sm:w-[90%]"} `}
                     >
                         <div
                             className={`px-3 py-2 rounded-xl wrap-break-word overflow-hidden  ${msg.role === "user"
@@ -220,10 +221,11 @@ const ChatScreen = ({ sessionId, isMobile, isSidebarOpen, setIsSidebarOpen = () 
                 )}
                 <div ref={bottomRef}></div>
             </div>
+            {/* Input Section */}
             <div className={`px-3 pb-2 flex justify-center items-center ${messages.length < 1 && "h-full flex-col gap-10"}`}>
-                {messages.length < 1 && <span className='text-2xl relative bottom-10 xl lg:text-4xl md:text-3xl sm:text-2xl capitalize'>{userName} </span>}
+                {messages.length < 1 && <span className='text-2xl relative bottom-10 xl lg:text-4xl md:text-3xl sm:text-2xl capitalize'>{userName}</span>}
                 <div
-                    className={`flex ${isMobile ? "w-[99%]" : "w-[60%]"} 
+                    className={`flex ${isMobile ? "w-[99%]" : "lg:w-[60%] md:w-[80%] sm:w-[90%]"} 
     gap-3 rounded-2xl bg-[#1a1a1a] border border-gray-800 
     ${messages.length < 1 ? "animate-rotating-shadow" : ""}
     flex-col p-4`}

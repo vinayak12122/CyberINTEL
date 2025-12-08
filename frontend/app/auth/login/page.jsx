@@ -1,7 +1,9 @@
 'use client'
+import Loader from '@/app/component/Loader';
 import { useAuth } from '@/app/context/AuthContext';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { GoArrowLeft } from 'react-icons/go';
 import { toast } from 'sonner';
@@ -10,8 +12,15 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const {login,googleLogin} = useAuth();
+  const { login, googleLogin, loginLoading ,user,loading} = useAuth();
+
+  useEffect(()=>{
+    if(!loading && user){
+      router.replace('/')
+    }
+  },[user,loading])
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -40,7 +49,7 @@ const Login = () => {
           placeholder='Enter your password' 
           className='border border-gray-700/40 outline-none rounded p-2 w-full placeholder:font-bold placeholder:text-neutral-600/50' />
           <button type='submit' className='w-full bg-gray-900/40 border border-gray-700/40  rounded p-2 font-bold font-raleway cursor-pointer'>
-            Continue
+            {loginLoading ? <Loader/> : "Continue"}
           </button>
         </form>
         <p className='border-b border-gray-700 w-[70%] lg:w-[32%] p-4'></p>

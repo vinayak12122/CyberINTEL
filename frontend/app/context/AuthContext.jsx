@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [loginLoading, setLoginLoading] = useState(false);
 
     const fetchUser = async () => {
         try {
@@ -40,6 +41,8 @@ export const AuthProvider = ({ children }) => {
             toast.error("Please fill all required fields");
             return false;
         }
+
+        setLoginLoading(true)
         try {
             const res = await fetch(`${BACKEND_URL}/auth/login`, {
                 method: "POST",
@@ -53,6 +56,7 @@ export const AuthProvider = ({ children }) => {
                 toast.error(Array.isArray(err.detail)
                     ? err.detail[0]?.msg || "Login failed"
                     : err.detail || "Login failed");
+                setLoginLoading(false);
                 return false
             }
 
@@ -63,6 +67,7 @@ export const AuthProvider = ({ children }) => {
             return true;
         } catch (err) {
             toast.error("Login Error", err.message)
+            setLoginLoading(false);
         }
     }
 
@@ -126,7 +131,8 @@ export const AuthProvider = ({ children }) => {
                 loading,
                 login,
                 logout,
-                googleLogin
+                googleLogin,
+                loginLoading
             }}
         >
             {children}

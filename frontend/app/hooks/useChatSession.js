@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { parseLLMChunk } from '../utils/parseLLM';
+import { useChatContext } from '../context/ChatContext';
 
 const useChatSession = (initialSessionId) => {
 
@@ -15,7 +16,9 @@ const useChatSession = (initialSessionId) => {
     const [messages, setMessages] = useState([]);
     const abortRef = useRef(null);
     const [isStreaming, setIsStreaming] = useState(false);
+    const [sessionTitle, setSessionTitle] = useState("New Chat");
 
+    const { addSession, loadSessions } = useChatContext();
 
     useEffect(()=>{
         if(authLoading) return;
@@ -28,7 +31,7 @@ const useChatSession = (initialSessionId) => {
                 setMessages(res.map(msg => ({
                     role:msg.role,
                     content:msg.content
-                })))
+                })));
             } catch (error) {
                 console.log("No history found yet");
             }
@@ -54,7 +57,13 @@ const useChatSession = (initialSessionId) => {
                 activeSession = res.session_id;
                 setSessionId(activeSession);
 
-                // SILENTLY update URL without remount
+                addSession({
+                    session_id: res.session_id,
+                    title: "New Chat",
+                    created_at: new Date().toISOString(),
+                    last_activity: new Date().toISOString()
+                });
+
                 if (typeof window !== "undefined") {
                     window.history.replaceState(null, "", `/${activeSession}`);
                 }
@@ -114,7 +123,7 @@ const useChatSession = (initialSessionId) => {
             if(done) break;
 
             buffer += value
-            console.log(buffer)
+            // console.log(buffer)
 
             while(buffer.includes("\n\n")){
                 const [full,rest] = buffer.split("\n\n",2);
@@ -144,6 +153,7 @@ const useChatSession = (initialSessionId) => {
 
     return {
         sessionId,
+        sessionTitle,
         messages,
         sendMessage,
         stopResponse,

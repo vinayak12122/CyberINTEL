@@ -2,6 +2,7 @@ import { Toaster } from "sonner";
 import { AuthProvider } from "./context/AuthContext";
 import { UIProvider } from "./context/UIContext";
 import "./globals.css";
+import { ChatProvider } from "./context/ChatContext";
 
 export const metadata = {
   title: "CyberINTEL",
@@ -23,7 +24,9 @@ export default function RootLayout({ children }) {
       >
         <AuthProvider>
           <UIProvider>
-            {children}
+            <ChatProvider>
+              {children}
+            </ChatProvider>
             <Toaster position="top-center" richColors />
           </UIProvider>
         </AuthProvider>

@@ -53,4 +53,12 @@ export const api = {
     getHistory: (session_id) => request(`/auth/chat/${session_id}`,{
         method:"GET"
     }),
+    getAllSessions:() => request("/auth/chat/session/all",{
+        method:"GET"
+    }),
+    deleteSession: (session_id) =>
+        request(`/auth/chat/${session_id}`, {
+            method: "DELETE",
+        }),
+
 };
